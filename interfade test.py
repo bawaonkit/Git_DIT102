@@ -18,7 +18,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Start Screen Example')
 clock = pygame.time.Clock()
 
-# ฟอนต์
+# ฟอนต์ไม่ถูกใจค่อยเปลี่ยนทีหลังได้
 title_font = pygame.font.SysFont('arial', 64, bold=True)
 menu_font = pygame.font.SysFont('arial', 28)
 small_font = pygame.font.SysFont('arial', 18)
