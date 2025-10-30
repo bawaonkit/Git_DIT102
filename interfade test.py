@@ -23,7 +23,7 @@ title_font = pygame.font.SysFont('arial', 64, bold=True)
 menu_font = pygame.font.SysFont('arial', 28)
 small_font = pygame.font.SysFont('arial', 18)
 
-# ปุ่มแบบง่าย
+# ปุ่ม
 class Button:
     def __init__(self, rect, text, font, bg=GRAY, fg=WHITE):
         self.rect = pygame.Rect(rect)
@@ -51,7 +51,7 @@ class Button:
 btn_w, btn_h = 240, 54
 play_btn = Button(((WIDTH-btn_w)//2, 250, btn_w, btn_h), 'Play', menu_font, bg=(28,130,196))
 
-# โลโก้เคลื่อนไหวลอยขึ้นลง
+# ตำแหน่งโลโก้
 logo_y = 120
 logo_dir = 1
 logo_range = 8
@@ -91,17 +91,17 @@ while running:
     #พื้นหลัง
     screen.fill((10, 12, 23))
 
-    # วาดโลโก้/ชื่อเกม
+    #โลโก้/ชื่อเกม
     title_surf = title_font.render('Bullet Hell', True, (240,240,240))
     title_rect = title_surf.get_rect(center=(WIDTH//2, int(logo_y)))
 
-    # เงา
+    # เงาตรงโลโก้
     shadow = title_font.render('My Awesome Game', True, (10,10,10))
     shadow_rect = shadow.get_rect(center=(WIDTH//2 + 4, int(logo_y) + 4))
     screen.blit(shadow, shadow_rect)
     screen.blit(title_surf, title_rect)
 
-    #เขียนคำด้านล่างใต้ชื่อ
+    #เขียนคำด้านล่างใต้ชื่อเกม
     subtitle = small_font.render('Press Enter or click Play to start', True, (180,180,180))
     screen.blit(subtitle, subtitle.get_rect(center=(WIDTH//2, int(logo_y)+50)))
 
@@ -134,3 +134,4 @@ while running:
     pygame.display.flip()
 pygame.quit()
 sys.exit()
+#เอาตัวเกมมาใส่หรือตกแต่งอะไรเพิ่มค่อยคุยกันอีกทีนะ
