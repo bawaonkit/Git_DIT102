@@ -1,6 +1,5 @@
 import sys
 import pygame
-from pygame import mixer
 
 # กำหนดขนาดหน้าต่าง
 WIDTH, HEIGHT = 720, 640
