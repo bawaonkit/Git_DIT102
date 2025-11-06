@@ -7,9 +7,8 @@ BLUE = (0, 0, 255)
 
 class Player:
     
-    def __init__(self, character):
+    def __init__(self):
         
-        self.character = character
         
         scale = 0.2
         
@@ -24,10 +23,10 @@ class Player:
         self.iv = False 
         self.iv_timer = 0 
         self.cd = 0 
-        self.blink_timer = 0 
 
         self.dash = False
         self.dash_time = 0
+        self.dash_cd = 0
         
         self.speed = 5 
         self.direction = "right" 
@@ -40,21 +39,24 @@ class Player:
     def set_hp(self, hp):
         self.hp = hp
 
-    def update(self):
+    def update(self,keys):
         
         bullets_fired = []
-        keys = pygame.key.get_pressed()
         
         SPEED = self.speed
-        if not self.dash and keys[pygame.K_r] :
+        if not self.dash and keys[pygame.K_r] and self.dash_cd == 0 :
             self.dash = True
-            self.dash_time = 12
+            self.dash_time = 20
+            self.dash_cd = 40
         
         if self.dash :
             SPEED = self.speed * 2 
             self.dash_time -= 1
             if self.dash_time <= 0 :
                 self.dash = False
+
+        if self.dash_cd > 0 :
+            self.dash_cd -= 1
 
         if keys[pygame.K_a]:
             self.rect.x -= SPEED
@@ -74,10 +76,8 @@ class Player:
             
         if self.iv:
             self.iv_timer -= 1
-            self.blink_timer += 1
             if self.iv_timer <= 0:
                 self.iv = False
-                self.blink_timer = 0
                 
         if self.cd > 0:
             self.cd -= 1
@@ -93,9 +93,6 @@ class Player:
 
     def draw(self, surface):
         
-        if self.iv:
-            if self.blink_timer % 10 > 5:
-                return 
         
         if self.direction == "left":
             surface.blit(self.img_left, self.rect)
