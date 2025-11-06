@@ -1,100 +1,103 @@
 # boss.py
 
 import pygame
-import random
-import config
-from bullet import Bullet # Import คลาส Bullet
+from bullet import Bullet 
 
-class Boss(pygame.sprite.Sprite):
+# สี
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+
+
+PHASE_DURATION = {
+    "single": 300,
+    "spread": 300, 
+    "wait": 120    
+}
+
+class Boss:
     
     def __init__(self):
-        super().__init__()
         
-        self.image = pygame.Surface((100, 50))
-        self.image.fill(config.RED)
+        
+        self.image = pygame.image.load("boss2.png").convert_alpha() 
+        self.image = pygame.transform.scale(self.image, (120, 120)) 
         self.rect = self.image.get_rect(
-            center=(config.SCREEN_WIDTH // 2, 75)
+            center=(800 // 2, 100) 
         )
         
-        self.speed = config.BOSS_SPEED
-        self.direction = 1 
-        
-        self.attack_pattern = "wait"
-        self.pattern_timer = 120 
-        self.bullet_timer = 0
+        self.speed = 5
+        self.dir = 1 
         
         self.hp = 100
         self.max_hp = 100
         
+        self.phases = ["single", "spread", "wait"]
+        self.current_phase_index = 0
+        self.current_phase = self.phases[self.current_phase_index]
+        
+        self.phase_timer = PHASE_DURATION[self.current_phase]
+        self.cd = 0
+        
     def set_hp(self, hp):
-        """ตั้งค่า HP เริ่มต้น (เรียกจาก main.py)"""
         self.hp = hp
         self.max_hp = hp
         
-    def get_hit(self, damage):
-        """ฟังก์ชันเมื่อบอสโดนยิง"""
-        self.hp -= damage
-        print(f"Boss hit! HP left: {self.hp}")
+    def hit(self, dmg):
+        self.hp -= dmg
 
     def is_dead(self):
-        """เช็คว่าบอสตายหรือยัง"""
         return self.hp <= 0
     
     def update(self, diff_settings):
-        """อัปเดตบอส และคืนค่า 'list ของกระสุนที่ยิงใหม่'"""
         
-        # 1. ย้ายบอส
-        self.rect.x += self.speed * self.direction
-        if self.rect.left <= 0 or self.rect.right >= config.SCREEN_WIDTH:
-            self.direction *= -1
+        self.rect.x += self.speed * self.dir
+        if self.rect.left <= 0 or self.rect.right >= 800: 
+            self.dir *= -1
             
-        bullets_to_fire = []
-        spawn_rate = diff_settings["spawn_rate"]
-        base_speed = diff_settings["speed"]
+        bullets_fired = []
+        
+        rate = diff_settings["spawn_rate"]
+        speed = diff_settings["speed"]
 
-        # 3. จัดการ Pattern
-        self.pattern_timer -= 1
-        if self.pattern_timer <= 0:
-            self.attack_pattern = random.choice(["wait", "single", "spread"])
-            self.bullet_timer = 0 
+
+        self.phase_timer -= 1
+        
+        if self.phase_timer <= 0:
+            self.current_phase_index = (self.current_phase_index + 1) % len(self.phases)
+            self.current_phase = self.phases[self.current_phase_index]
             
-            if self.attack_pattern == "wait":
-                self.pattern_timer = random.randint(60, 120) 
-            elif self.attack_pattern == "single":
-                self.pattern_timer = random.randint(120, 180) 
-            elif self.attack_pattern == "spread":
-                self.pattern_timer = random.randint(180, 240)
-                
-        # 4. ยิงกระสุน
-        self.bullet_timer += 1
+            self.phase_timer = PHASE_DURATION[self.current_phase]
+            
+            self.cd = 0 
+            
+        if self.cd > 0:
+            self.cd -= 1
         
-        if self.attack_pattern == "single":
-            if self.bullet_timer >= spawn_rate:
-                self.bullet_timer = 0
+        if self.cd == 0 and self.current_phase != "wait":
+            
+            if self.current_phase == "single":
+                self.cd = rate 
                 x, y = self.rect.centerx, self.rect.bottom
-                bullets_to_fire.append(Bullet(x, y, 0, base_speed, config.WHITE, 20, 20))
+                bullets_fired.append(Bullet(x, y, 0, speed, WHITE, 20, 20))
                 
-        elif self.attack_pattern == "spread":
-            if self.bullet_timer >= spawn_rate * 2:
-                self.bullet_timer = 0
+            elif self.current_phase == "spread":
+                self.cd = rate * 2
                 x, y = self.rect.centerx, self.rect.bottom
-                bullets_to_fire.append(Bullet(x, y, 0, base_speed, config.WHITE, 20, 20))
-                bullets_to_fire.append(Bullet(x, y, -2, base_speed, config.WHITE, 20, 20))
-                bullets_to_fire.append(Bullet(x, y, 2, base_speed, config.WHITE, 20, 20))
+                bullets_fired.append(Bullet(x, y, 0, speed, WHITE, 20, 20)) 
+                bullets_fired.append(Bullet(x, y, -2, speed, WHITE, 20, 20)) 
+                bullets_fired.append(Bullet(x, y, 2, speed, WHITE, 20, 20)) 
         
-        return bullets_to_fire
+        return bullets_fired 
 
     def draw(self, surface):
-        """วาดบอส และแถบ HP"""
-        
-        # 1. วาดแถบ HP
-        bg_bar_rect = pygame.Rect(self.rect.left, self.rect.top - 20, self.rect.width, 15)
-        pygame.draw.rect(surface, config.RED, bg_bar_rect)
+
+        hp_bar = pygame.Rect(self.rect.left, self.rect.top - 20, self.rect.width, 15)
+        pygame.draw.rect(surface, RED, hp_bar)
         
         if self.hp > 0:
-            current_hp_width = (self.hp / self.max_hp) * self.rect.width
-            health_bar_rect = pygame.Rect(self.rect.left, self.rect.top - 20, current_hp_width, 15)
-            pygame.draw.rect(surface, config.GREEN, health_bar_rect)
+            hp_width = (self.hp / self.max_hp) * self.rect.width
+            cur_hp_bar = pygame.Rect(self.rect.left, self.rect.top - 20, hp_width, 15)
+            pygame.draw.rect(surface, GREEN, cur_hp_bar)
         
-        # 2. วาดตัวบอส
         surface.blit(self.image, self.rect)
