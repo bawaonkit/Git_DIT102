@@ -32,9 +32,7 @@ class Player:
         self.direction = "right" 
         
         self.image = self.img_right 
-        self.rect = self.image.get_rect(
-            center=(800 // 2, 600 - 70) 
-        )
+        self.rect = self.image.get_rect((800 // 2, 600 - 70))
 
     def set_hp(self, hp):
         self.hp = hp
