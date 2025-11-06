@@ -1,19 +1,17 @@
 from player import Player
 from boss import Boss
 
-# --- (แก้ไข) ---
-# 1. เอา 'diff' ออกจากพารามิเตอร์
-# 2. PLAYER_HP และ BOSS_HP ตอนนี้ควรเป็นตัวเลขค่าเดียว (ไม่ใช่ List หรือ Dict)
+
 def reset_game(PLAYER_HP, BOSS_HP):
     
     b_bullets = []
     p_bullets = []
     
     player = Player()
-    player.set_hp(PLAYER_HP)  # 3. ตั้งค่า HP จากตัวเลขโดยตรง
+    player.set_hp(PLAYER_HP)
     
     boss = Boss()
-    boss.set_hp(BOSS_HP)  # 4. ตั้งค่า HP จากตัวเลขโดยตรง
+    boss.set_hp(BOSS_HP)
     
     return player, boss, p_bullets, b_bullets
 
@@ -22,12 +20,10 @@ def draw_text(screen, my_font, text, x, y, color):
     text_rect = text_obj.get_rect(center=(x, y))
     screen.blit(text_obj, text_rect)
 
-# --- (แก้ไข) ---
-# 1. เอา 'diff_settings' ออกจากพารามิเตอร์
 def run_game_frame(screen, player, boss, p_bullets, b_bullets, WIDTH, HEIGHT, RED, my_font):
     
     new_p_bullets = player.update()
-    new_b_bullets = boss.update()  # 2. เรียก boss.update() โดยไม่ส่งค่า 'diff_settings'
+    new_b_bullets = boss.update()
     
     p_bullets.extend(new_p_bullets)
     b_bullets.extend(new_b_bullets)
