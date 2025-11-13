@@ -119,7 +119,7 @@ pygame.display.set_caption("My Game (Prototype - Bullets)")
 
 my_font = pygame.font.SysFont("Tahoma", 20)
 
-# --- โหลดรูปภาพทั้งหมด ---
+
 
 BACKGROUND_IMAGE = pygame.image.load("Background.png")
 # ปรับขนาดรูปพื้นหลังให้พอดีจอ (WIDTH, HEIGHT)
@@ -137,7 +137,7 @@ p_bullet_img_orig = pygame.image.load("bullet_player.png")
 PLAYER_BULLET_IMG = pygame.transform.scale(p_bullet_img_orig, (20, 40)) 
 b_bullet_img_orig = pygame.image.load("bullet_boss.png")
 BOSS_BULLET_IMG = pygame.transform.scale(b_bullet_img_orig, (30, 30)) 
-# --- จบการโหลดรูปภาพ ---
+
 
 
 # กำหนดสถานะ (หน้า) เริ่มต้นของเกม
@@ -156,7 +156,6 @@ p_bullets = []
 
 # สร้างฟังก์ชันย่อ (wrapper) สำหรับ draw_text_utility (ให้เรียกใช้ง่ายขึ้น)
 def draw_text(text, x, y, color=WHITE):
-    # 🌟 เรียกใช้ฟังก์ชัน draw_text_utility จากโมดูล game_utils
     game_utils.draw_text_utility(screen, my_font, text, x, y, color)
     
 
@@ -333,10 +332,7 @@ while running:
         pygame.draw.rect(screen, GRAY, game_over_back_btn); draw_text("กลับ", game_over_back_btn.centerx, game_over_back_btn.centery)
 
 
-    # อัปเดตการเปลี่ยนแปลงทั้งหมดลงบนหน้าจอจริง (สำคัญมาก)
     pygame.display.flip()
-    # ควบคุมให้ Game Loop ทำงานไม่เกิน 60 เฟรมต่อวินาที (FPS)
     clock.tick(60) 
 
-# จบการทำงานของ pygame (หลังจากหลุดจาก while loop)
 pygame.quit()
