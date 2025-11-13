@@ -49,7 +49,6 @@ def run_game_frame(screen, player, boss, player_bullets, boss_bullets, my_font, 
     
     # วนลูปกระสุนผู้เล่น (ใช้ [:] เพื่อสร้างสำเนา List ทำให้ลบสมาชิกขณะวนลูปได้)
     for p in player_bullets[:]:
-        # 🌟 เรียกใช้ฟังก์ชัน update_bullet จากโมดูล bullet_logic
         bullet_logic.update_bullet(p) 
         # ตรวจสอบว่ากระสุนตกขอบจอ (บน, ล่าง, ซ้าย, ขวา) หรือไม่
         if p["rect"].bottom < 0 or p["rect"].top > HEIGHT or p["rect"].left > WIDTH or p["rect"].right < 0:
@@ -58,7 +57,6 @@ def run_game_frame(screen, player, boss, player_bullets, boss_bullets, my_font, 
             
     # วนลูปกระสุนบอส (ใช้ [:] เช่นกัน)
     for b in boss_bullets[:]:
-        # 🌟 เรียกใช้ฟังก์ชัน update_bullet จากโมดูล bullet_logic
         bullet_logic.update_bullet(b) 
         # ตรวจสอบว่ากระสุนตกขอบจอหรือไม่
         if b["rect"].bottom < 0 or b["rect"].top > HEIGHT or b["rect"].left > WIDTH or b["rect"].right < 0:
@@ -69,7 +67,6 @@ def run_game_frame(screen, player, boss, player_bullets, boss_bullets, my_font, 
     for b in boss_bullets[:]: 
         # ตรวจสอบว่าสี่เหลี่ยมของผู้เล่น ชนกับ สี่เหลี่ยมของกระสุนบอส หรือไม่
         if player["rect"].colliderect(b["rect"]):
-            # 🌟 เรียกใช้ฟังก์ชัน hit_player จากโมดูล player_logic
             player_logic.hit_player(player) 
             # ลบกระสุนนัดนั้นทิ้ง (ป้องกันการโดนซ้ำ)
             boss_bullets.remove(b) 
@@ -78,7 +75,6 @@ def run_game_frame(screen, player, boss, player_bullets, boss_bullets, my_font, 
     for p in player_bullets[:]: 
         # ตรวจสอบว่าสี่เหลี่ยมของบอส ชนกับ สี่เหลี่ยมของกระสุนผู้เล่น หรือไม่
         if boss["rect"].colliderect(p["rect"]):
-            # 🌟 เรียกใช้ฟังก์ชัน hit_boss จากโมดูล boss_logic
             boss_logic.hit_boss(boss, 1) 
             # ลบกระสุนนัดนั้นทิ้ง
             player_bullets.remove(p) 
@@ -121,7 +117,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 # ตั้งชื่อหน้าต่างเกม (Window Title)
 pygame.display.set_caption("My Game (Prototype - Bullets)")
 
-my_font = pygame.font.SysFont("Tahoma", 40)
+my_font = pygame.font.SysFont("Tahoma", 20)
 
 # --- โหลดรูปภาพทั้งหมด ---
 
@@ -279,9 +275,7 @@ while running:
         screen.fill(BLACK)
     # --- จบการวาดพื้นหลัง ---
 
-    # --- ส่วนการวาด (ตามสถานะ page) ---
-    # (วาดทับพื้นหลัง)
-    # ถ้าอยู่ที่หน้า "main_menu"
+
     if page == "main_menu":
         # วาดชื่อเกม
         draw_text("My Game", WIDTH // 2, 100) 
@@ -330,7 +324,7 @@ while running:
     # หรือถ้าอยู่ที่หน้า "game_over"
     elif page == "game_over":
         # วาดข้อความแสดงการแพ้ (สีแดง)
-        draw_text("แพ้แล้ว...", WIDTH // 2, 100, RED) 
+        draw_text("แพ้แล้ว...", WIDTH // 2, 100, GRAY) 
         # วาดข้อความชวนเล่นใหม่
         draw_text("สู้ใหม่อีกครั้ง?", WIDTH // 2, 200)
         # วาดปุ่ม Retry และข้อความ
