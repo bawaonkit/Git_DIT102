@@ -2,7 +2,7 @@ import pygame
 # นำเข้าฟังก์ชัน create_bullet จากไฟล์ bullet_logic.py
 from bullet_logic import create_bullet 
 
-# 🌟 ค่าคงที่เหล่านี้ใช้เฉพาะในไฟล์นี้ (ไม่ทำให้เกิด Circular Import)
+
 # เลยเก็บไว้ที่นี่ได้
 # อัตราการยิงของบอส (ค่า Cooldown เป็นเฟรม)
 BOSS_SPAWN_RATE = 20  
