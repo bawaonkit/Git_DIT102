@@ -4,7 +4,7 @@
 import pygame # นำเข้า pygame
 from bullet_logic import create_bullet # นำเข้าฟังก์ชันสร้างกระสุน
 
-# 🌟 ค่าคงที่เหล่านี้ใช้เฉพาะในไฟล์นี้ (ไม่ทำให้เกิด Circular Import)
+# ค่าคงที่เหล่านี้ใช้เฉพาะในไฟล์นี้ (ไม่ทำให้เกิด Circular Import)
 # เลยเก็บไว้ที่นี่ได้
 BOSS_SPAWN_RATE = 20 # อัตราการยิงของบอส (ค่า Cooldown เป็นเฟรม)
 BOSS_SPEED = 6       # ความเร็วของกระสุนบอส
@@ -20,12 +20,12 @@ def create_boss(hp, width):
     รับค่า hp (จาก main.py)
     รับค่า width (จาก main.py) เพื่อกำหนดจุดเกิด
     """
-    # โหลดรูปภาพบอส (ใช้ .convert_alpha() เพื่อรองรับความโปร่งใส)
+
     image = pygame.image.load("boss2.png").convert_alpha()
     # ปรับขนาดรูปภาพบอสเป็น 120x120 pixels
     image = pygame.transform.scale(image, (120, 120))
 
-    # 🌟 สร้างสี่เหลี่ยม (rect) โดยใช้ width ที่รับมาจาก main.py
+    # สร้างสี่เหลี่ยม (rect) โดยใช้ width ที่รับมาจาก main.py
     rect = image.get_rect(center=(width // 2, 100))
     
     # คืนค่า Dictionary ที่เก็บข้อมูลของบอส
@@ -46,7 +46,7 @@ def update_boss(boss, bullet_img, max_width):
     """
     # เคลื่อนที่บอสในแกน X (ตามความเร็วและทิศทาง dir)
     boss["rect"].x += boss["speed"] * boss["dir"]
-    # 🌟 ตรวจสอบว่าบอสชนขอบจอซ้าย หรือ ขวา หรือไม่ (ใช้ max_width ที่รับเข้ามา)
+    # ตรวจสอบว่าบอสชนขอบจอซ้าย หรือ ขวา หรือไม่ (ใช้ max_width ที่รับเข้ามา)
     if boss["rect"].left <= 0 or boss["rect"].right >= max_width: 
         boss["dir"] *= -1 # ถ้าชน ให้สลับทิศทาง
         
@@ -99,7 +99,7 @@ def draw_boss(surface, boss, red_color, green_color):
     """
     # สร้างสี่เหลี่ยมสำหรับพื้นหลัง HP Bar (สีแดง)
     hp_bar = pygame.Rect(boss["rect"].left, boss["rect"].top - 20, boss["rect"].width, 15)
-    # 🌟 วาดพื้นหลัง HP Bar (ใช้ red_color ที่รับเข้ามา)
+    # วาดพื้นหลัง HP Bar (ใช้ red_color ที่รับเข้ามา)
     pygame.draw.rect(surface, red_color, hp_bar)
     
     # ตรวจสอบว่าบอสยังมี HP เหลือ
@@ -108,7 +108,7 @@ def draw_boss(surface, boss, red_color, green_color):
         hp_width = (boss["hp"] / boss["max_hp"]) * boss["rect"].width
         # สร้างสี่เหลี่ยมสำหรับ HP Bar ปัจจุบัน
         cur_hp_bar = pygame.Rect(boss["rect"].left, boss["rect"].top - 20, hp_width, 15)
-        # 🌟 วาด HP Bar ปัจจุบัน (ใช้ green_color ที่รับเข้ามา)
+        # วาด HP Bar ปัจจุบัน (ใช้ green_color ที่รับเข้ามา)
         pygame.draw.rect(surface, green_color, cur_hp_bar)
     
     # วาดรูปบอส
